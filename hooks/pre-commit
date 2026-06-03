@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# pre-commit hook — scans staged changes for secrets using gitleaks
+
+# Check if hook is enabled (disable with: git config hooks.gitleaks false)
+
+HOOK_ENABLED="$(git config --get hooks.gitleaks 2>/dev/null || echo true)"
+
+if [ "$HOOK_ENABLED" = "false" ]; then
+  echo "[gitleaks] Hook disabled, skipping."
+  exit 0
+fi
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "[gitleaks] ERROR: gitleaks is not installed."
+  echo "Run: curl -sSfL https://raw.githubusercontent.com/lutska/git-toolkit/main/install.sh | sh"
+  exit 1
+fi
+
+# Scan staged diff
+echo "Running gitleaks secret scan..."
+
+if ! gitleaks git --pre-commit --staged --redact --verbose; then
+  echo ""
+  echo "[gitleaks] COMMIT REJECTED: secrets detected in staged changes."
+  echo "[gitleaks] Remove the secret or add '# gitleaks:allow' to suppress false positives."
+  exit 1
+fi
+
+echo "[gitleaks] No secrets found."
+exit 0
