@@ -3,8 +3,17 @@
 set -e
 
 REPO_URL="https://raw.githubusercontent.com/lutska/git-toolkit/main"
+HOOK_URL="${REPO_URL}/hooks/pre-commit"
+GITLEAKS_INSTALL_URL="${REPO_URL}/scripts/install-gitleaks.sh"
 
 echo "Installing Gitleaks Pre-Commit Hook..."
+
+if ! git rev-parse --git-dir >/dev/null 2>&1; then
+  echo "[install] ERROR: Not inside a Git repository."
+  exit 1
+fi
+
+curl -sSfL "$GITLEAKS_INSTALL_URL" | bash
 
 HOOK_FILE="$(git rev-parse --git-dir)/hooks/pre-commit"
 
