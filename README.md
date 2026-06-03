@@ -46,6 +46,7 @@ If a secret is detected:
 ```text
 git-toolkit/
 ├── install.sh                      # Main installation script (Installs Gitleaks, configures the pre-commit hook, and supports curl | sh installation).
+├── .gitleaks.toml                  # Custom Gitleaks rules extending default detection capabilities.
 ├── hooks/
 │   └── pre-commit                  # Git pre-commit hook executed automatically before every commit.
 ├── scripts/
@@ -75,6 +76,18 @@ The installer will:
 4. Enable the hook using Git configuration.
 
 ---
+
+## Gitleaks Configuration
+
+The repository includes a custom `.gitleaks.toml` configuration file.
+
+The configuration extends the default Gitleaks rule set and adds custom rules for detecting Telegram Bot Tokens.
+
+Default Gitleaks configuration:
+
+https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml
+
+Custom rules are maintained separately to keep the configuration minimal while preserving all built-in Gitleaks detection capabilities.
 
 ## Hook Configuration
 
@@ -158,7 +171,7 @@ Expected result:
 To suppress a known false positive, add `# gitleaks:allow` to the same line:
 
 ```python
-TEST_TOKEN = "123456789:AAXXXXXXXXXXXXXXXXXXXQwErTy"  # gitleaks:allow
+TEST_TOKEN = "123456789:AFakeTokenForTestingPurposesOnlyX"  # gitleaks:allow
 ```
 
 Only use this for test values or non-sensitive data.
