@@ -53,6 +53,8 @@ git-toolkit/
 │   └── install-gitleaks.sh         # Detects OS/architecture and installs the latest Gitleaks release.
 ├── examples/
 │   └── telegram-token.example      # Example Telegram Bot Token used to verify secret detection.
+├── .data/                          # Demo artifacts (not part of runtime system)
+    └── gitleaks_demo.gif           # Usage demonstration
 └── README.md                       # Project documentation and usage instructions.
 ``` 
 
@@ -140,12 +142,36 @@ git commit -m "[feat] test gitleaks"
 
 Expected result:
 
-```text
+```bash
+git commit -m "feat: add custom Gitleaks rules"
 Running gitleaks secret scan...
+
+    ○
+    │╲
+    │ ○
+    ○ ░
+    ░    gitleaks
+
+Finding:     BOT_TOKEN=REDACTED
+Secret:      REDACTED
+RuleID:      telegram-bot-token
+Entropy:     4.726144
+Tags:        [telegram token]
+File:        examples/telegram-token.example
+Line:        4
+Fingerprint: examples/telegram-token.example:telegram-bot-token:4
+
+7:52PM INF 0 commits scanned.
+7:52PM INF scanned ~1400 bytes (1.40 KB) in 196ms
+7:52PM WRN leaks found: 1
 
 [gitleaks] COMMIT REJECTED: secrets detected in staged changes.
 [gitleaks] Remove the secret or add '# gitleaks:allow' to suppress false positives.
 ```
+
+Demo: 
+
+![Gitleaks demo](.data/gitleaks_demo.gif)
 
 
 ### Example: Commit Allowed
